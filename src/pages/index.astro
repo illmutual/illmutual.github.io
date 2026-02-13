@@ -1,49 +1,395 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
----
+import Layout from "../layouts/BlogPost.astro";
+import { getCollection } from "astro:content";
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+const lastUpdated = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+const statusText = "building + archiving coding projects, research papers, other cool shit";
+---
+<main class="wrap">
+  <section class="shell">
+    <header class="topbar">
+      <div class="marquee"><span>| PDFs hosted here | code + notes | no ads |</span></div>
+		<div class="brand">
+        <span class="cursor"></span>
+        <span class="logo">illmutual - digital archive</span>
+      </div>
+
+      <nav class="nav">
+        <a href="/blog">blog</a>
+        <a href="/projects">projects</a>
+        <a href="/papers">papers</a>
+        <a href="/about">about</a>
+      </nav>
+    </header>
+
+    <div class="grid3">
+      <!-- LEFT COLUMN -->
+      <aside class="col">
+        <div class="panel">
+          <div class="panelHead">status</div>
+
+          <div class="panelBody">
+            <p class="tiny muted">{statusText}</p>
+
+			<div class="statusRow">
+       			<span class="statusChip">last updated: {lastUpdated}</span>
+        		<span class="statusChip">timezone: CST</span>
+      		</div>
+
+            <div class="badgeGrid">
+      		</div>
+		 </div>
+  	</div>
+</aside>
+
+      <!-- CENTER COLUMN -->
+      <section class="col center">
+        <div class="panel">
+          <div class="panelHead">latest posts</div>
+          <div class="panelBody">
+            <div class="postGrid">
+              {posts.map((post) => (
+                <a class="postCard" href={`/blog/${post.id.replace(/\.mdx?$/, "")}/`}>
+                  <div class="postMeta">
+                    <span class="chip">blog</span>
+                    <time datetime={post.data.pubDate.toISOString()}>
+                      {post.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                    </time>
+                  </div>
+                  <div class="postTitle">{post.data.title}</div>
+                  {post.data.description && <div class="postDesc">{post.data.description}</div>}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+		</div>
+      </section>
+	</div>
+</div>
+
+      <aside class="col center">
+        <div class="panel">
+       
+		</div>
+	</div>
+			<div class="panel">
+          <div class="panelHead">guestbook</div>
+          <div class="panelBody">
+            <p class="tiny">leave a note (for now this opens an issue on GitHub):</p>
+            <a 
+			class="btnBig ghost"
+			 href="https://github.com/illmutual/illmutual.github.io/issues/new?title=guestbook&body=leave%20a%20note%20here%20%3A)"
+			 target="_blank"
+			 rel="noreferrer"
+			>
+			 sign the guestbook :)
+			</a>
+		</div>
+	</div>
+</aside>
+</main>
+ 
+</Layout>
+
+<style>
+:global(body){
+  margin:0;
+  color:#0b0b14;
+  font-family: ui-monospace, Menlo, Monaco, Consolas, "Courier New", monospace;
+  background:
+    radial-gradient(1200px 700px at 10% 10%, rgba(59, 233, 138, 0.484), transparent 60%),
+    radial-gradient(900px 600px at 90% 20%, rgba(0, 221, 255, 0.497), transparent 55%),
+    radial-gradient(900px 700px at 20% 90%, rgba(0, 255, 89, 0.18), transparent 60%),
+    radial-gradient(1200px 800px at 50% 50%, rgba(19, 61, 33, 0.92), rgba(43, 64, 49, 0.98)),
+    #42604e;
+}
+
+:global(body)::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    radial-gradient(rgba(255,255,255,.18) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity:.10;
+}
+
+.wrap{ max-width:1100px; margin:0 auto; padding:2.25rem 1rem 4rem; }
+
+.shell{
+  background: rgba(255,255,255,.06);
+  border: 2px solid rgba(255,255,255,.18);
+  border-radius: 22px;
+  box-shadow: 0 20px 70px rgba(0,0,0,.45);
+  overflow:hidden;
+  backdrop-filter: blur(10px);
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  padding:.85rem 1rem;
+  background: linear-gradient(90deg, rgba(15, 190, 217, 0.18), rgba(255,92,213,.16));
+  border-bottom: 2px solid rgba(255,255,255,.18);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 18px;
+  background: #dce2e1;
+  box-shadow: 0 0 8px #00ffcc, 0 0 16px #ff00aa;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+
+.nav{ display:flex; gap:.7rem; flex-wrap:wrap; }
+.nav a{
+  color: rgba(255,255,255,.92);
+  text-decoration:none;
+  font-weight:900;
+  padding:.3rem .55rem;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.22);
+  background: rgba(0,0,0,.18);
+}
+.nav a:hover{ filter:brightness(1.15); }
+
+.grid3{
+  display:grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+@media (max-width: 980px){ .grid3{ grid-template-columns: 1fr; } }
+
+.col{ display:grid; gap:1rem; align-content:start; }
+
+.panel{
+  background: rgba(226, 239, 220, 0.85);
+  border: 2px solid rgba(10,10,10,.75);
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.16);
+  overflow:hidden;
+}
+
+.panelHead{
+  font-weight: 900;
+  letter-spacing:.08em;
+  text-transform: lowercase;
+  padding:.55rem .8rem;
+  background: linear-gradient(90deg, rgba(178, 215, 190, 0.55), rgba(0,220,255,.25));
+  border-bottom: 2px solid rgba(10,10,10,.65);
+}
+
+.panelBody{ padding:.85rem .9rem; }
+
+.heroCard{
+  background: rgba(255,255,255,.92);
+  border: 2px solid rgba(10,10,10,.75);
+  border-radius: 18px;
+  padding: 1.1rem 1.1rem 1rem;
+  box-shadow: 0 14px 30px rgba(0,0,0,.16);
+}
+
+h1{
+  margin:.2rem 0 .6rem;
+  font-size: clamp(1.75rem, 3.6vw, 2.65rem);
+  line-height:1.08;
+  font-weight: 900;
+}
+
+.sub{ margin:0 0 .9rem; max-width:70ch; opacity:.9; }
+
+.cta{ display:flex; gap:.6rem; flex-wrap:wrap; margin-top:.75rem; }
+
+.btnBig{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:.7rem 1rem;
+  border-radius: 999px;
+  border: 2px solid rgba(10,10,10,.8);
+  background: linear-gradient(135deg, rgba(255,92,213,.18), rgba(0,220,255,.14));
+  text-decoration:none;
+  font-weight: 900;
+  color:#0b0b14;
+  box-shadow: 0 10px 18px rgba(0,0,0,.12);
+}
+.btnBig.ghost{ background: rgba(255,255,255,.65); }
+.btnBig:hover{ transform: translateY(-2px); transition:.12s ease; }
+
+.badgeRow{ display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.5rem; }
+.badge{
+  font-size:.72rem;
+  padding:.2rem .55rem;
+  border-radius: 999px;
+  border:2px solid rgba(10,10,10,.75);
+  background: rgba(255,255,255,.8);
+  font-weight: 900;
+}
+
+.buttons{ display:grid; gap:.5rem; }
+.microBtn{
+  display:inline-block;
+  padding:.35rem .55rem;
+  border:2px dashed rgba(10,10,10,.65);
+  border-radius: 12px;
+  background: rgba(255,255,255,.7);
+  font-weight: 900;
+  font-size:.78rem;
+}
+
+.log{ list-style:none; padding:0; margin:0; display:grid; gap:.4rem; }
+.date{
+  display:inline-block;
+  min-width: 3.6rem;
+  font-weight: 900;
+  opacity:.75;
+}
+
+.postGrid{ display:grid; gap:.65rem; }
+.postCard{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  border:2px solid rgba(10,10,10,.75);
+  border-radius: 14px;
+  padding:.65rem .7rem;
+  background: rgba(255,255,255,.75);
+}
+.postCard:hover{ transform: translateY(-2px); transition:.12s ease; }
+
+.postMeta{
+  display:flex;
+  justify-content:space-between;
+  gap:.6rem;
+  font-size:.8rem;
+  opacity:.8;
+  margin-bottom:.35rem;
+}
+.chip{
+  font-weight: 900;
+  padding:.12rem .45rem;
+  border-radius: 999px;
+  border:2px solid rgba(10,10,10,.75);
+  background: rgba(154, 152, 143, 0.55);
+}
+
+.postTitle{ font-weight: 900; margin-bottom:.2rem; }
+.postDesc{ opacity:.85; font-size:.9rem; }
+
+.tiny{ font-size:.9rem; margin:.1rem 0; }
+.tinyList{ margin:.2rem 0 0; padding-left: 1.1rem; }
+.muted{ opacity:.7; }
+
+.webring{
+  display:flex;
+  justify-content:space-between;
+  gap:.5rem;
+  align-items:center;
+  font-weight: 900;
+  font-size:.85rem;
+}
+.webring a{ color:#0b0b14; }
+
+.statusRow{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin:.6rem 0 .75rem;
+}
+.statusChip{
+  font-size:.78rem;
+  font-weight:900;
+  padding:.2rem .55rem;
+  border-radius:999px;
+  border:2px solid rgba(10,10,10,.75);
+  background: rgba(255,255,255,.78);
+}
+
+.badgeGrid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:.5rem;
+}
+
+.miniNote{
+  margin-top:.85rem;
+  padding:.7rem .75rem;
+  border:2px dashed rgba(10,10,10,.55);
+  border-radius:14px;
+  background: rgba(255,255,255,.65);
+}
+.miniTitle{
+  font-weight:900;
+  font-size:.8rem;
+  margin-bottom:.45rem;
+  opacity:.85;
+}
+.codeBox{
+  display:block;
+  font-size:.78rem;
+  padding:.55rem .6rem;
+  border-radius:12px;
+  background: rgba(0,0,0,.08);
+  border:1px solid rgba(0,0,0,.18);
+  overflow:auto;
+}
+
+.webringNav{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:.5rem;
+}
+.webringBtn{
+  text-align:center;
+  text-decoration:none;
+  font-weight:900;
+  padding:.45rem .55rem;
+  border-radius: 12px;
+  border:2px solid rgba(10,10,10,.75);
+  background: rgba(255,255,255,.78);
+  color:#0b0b14;
+}
+.webringBtn:hover{ transform: translateY(-2px); transition:.12s ease; }
+
+.webringGrid{
+  margin-top:.75rem;
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:.55rem;
+}
+.siteBtn{
+  display:block;
+  text-decoration:none;
+  font-weight:900;
+  font-size:.82rem;
+  padding:.55rem .6rem;
+  border-radius: 12px;
+  border:2px solid rgba(10,10,10,.75);
+  background: linear-gradient(135deg, rgba(255,214,0,.45), rgba(0,220,255,.18));
+  color:#0b0b14;
+}
+.siteBtn:hover{ filter:brightness(1.07); transform: translateY(-2px); transition:.12s ease; }
+
+</style>
