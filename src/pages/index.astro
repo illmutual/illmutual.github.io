@@ -46,54 +46,73 @@ const statusText = "building + archiving coding projects, research papers, other
   	</div>
 </aside>
 
-      <!-- CENTER COLUMN -->
-      <section class="col center">
-        <div class="panel">
-          <div class="panelHead">latest posts</div>
-          <div class="panelBody">
-            <div class="postGrid">
-              {posts.map((post) => (
-                <a class="postCard" href={`/blog/${post.id.replace(/\.mdx?$/, "")}/`}>
-                  <div class="postMeta">
-                    <span class="chip">blog</span>
-                    <time datetime={post.data.pubDate.toISOString()}>
-                      {post.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
-                    </time>
-                  </div>
-                  <div class="postTitle">{post.data.title}</div>
-                  {post.data.description && <div class="postDesc">{post.data.description}</div>}
-                </a>
-              ))}
+        <!-- CENTER COLUMN -->
+        <section class="col center">
+          <div class="panel">
+            <div class="panelHead">latest posts</div>
+
+            <div class="panelBody">
+              <div class="postGrid">
+                {posts.map((post) => (
+                  <a
+                    class="postCard"
+                    href={`/blog/${post.id.replace(/\.mdx?$/, "")}/`}
+                  >
+                    <div class="postMeta">
+                      <span class="chip">blog</span>
+                      <time datetime={post.data.pubDate.toISOString()}>
+                        {post.data.pubDate.toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric"
+                          }
+                        )}
+                      </time>
+                    </div>
+
+                    <div class="postTitle">
+                      {post.data.title}
+                    </div>
+
+                    {post.data.description && (
+                      <div class="postDesc">
+                        {post.data.description}
+                      </div>
+                    )}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-		</div>
-      </section>
-	</div>
-</div>
+        </section>
 
-      <aside class="col center">
-        <div class="panel">
-       
-		</div>
-	</div>
-			<div class="panel">
-          <div class="panelHead">guestbook</div>
-          <div class="panelBody">
-            <p class="tiny">leave a note (for now this opens an issue on GitHub):</p>
-            <a 
-			class="btnBig ghost"
-			 href="https://github.com/illmutual/illmutual.github.io/issues/new?title=guestbook&body=leave%20a%20note%20here%20%3A)"
-			 target="_blank"
-			 rel="noreferrer"
-			>
-			 sign the guestbook :)
-			</a>
-		</div>
-	</div>
-</aside>
-</main>
- 
+        <!-- RIGHT COLUMN -->
+        <aside class="col">
+          <div class="panel">
+            <div class="panelHead">guestbook</div>
+
+            <div class="panelBody">
+              <p class="tiny">
+                leave a note (for now this opens an issue on GitHub):
+              </p>
+
+              <a
+                class="btnBig ghost"
+                href="https://github.com/illmutual/illmutual.github.io/issues/new?title=guestbook&body=leave%20a%20note%20here%20%3A)"
+                target="_blank"
+                rel="noreferrer"
+              >
+                sign the guestbook :)
+              </a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+  </main>
 </Layout>
 
 <style>
