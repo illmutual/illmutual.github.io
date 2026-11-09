@@ -40,7 +40,6 @@ const statusText = "building + archiving coding projects, research papers, other
   </div>
 
 <nav class="nav" aria-label="Main navigation">
-  <a href="/">home</a>
   <a href="/writing">writing</a>
   <a href="/projects">projects</a>
   <a href="/papers">research</a>
@@ -511,7 +510,7 @@ const statusText = "building + archiving coding projects, research papers, other
    link except the first one */
 
 .nav a + a::before {
-  content: "✳";
+  content: "✳︎";
   display: inline-block;
   color: #526b45;
   font-size: 0.9rem;
@@ -531,12 +530,14 @@ const statusText = "building + archiving coding projects, research papers, other
 }
 
 
+
 @media (max-width: 980px) {
   .grid3 {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
-  .center {
+  .grid3 > .center {
     order: 1;
   }
 
@@ -548,11 +549,14 @@ const statusText = "building + archiving coding projects, research papers, other
     order: 3;
   }
 
-  .col {
+  .grid3 > .col {
+    width: 100%;
+    box-sizing: border-box;
     border-right: none;
     border-bottom: 1px solid #526b45;
   }
 }
+
 
 
 .col {
