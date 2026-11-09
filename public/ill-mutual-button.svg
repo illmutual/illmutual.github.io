@@ -1,0 +1,18 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="88" height="31" viewBox="0 0 88 31">
+  <rect width="88" height="31" fill="#171717"/>
+  <rect x="1" y="1" width="86" height="29"
+        fill="none" stroke="#526b45" stroke-width="2"/>
+
+  <text x="44" y="15" text-anchor="middle"
+        font-family="Georgia, serif" font-size="10"
+        font-weight="bold" fill="#f3f0dc">
+    ILL MUTUAL
+  </text>
+
+  <text x="44" y="23" text-anchor="middle"
+        font-family="monospace" font-size="5"
+        fill="#f3f0dc">
+    PERSONAL ARCHIVE
+  </text>
+</svg>
