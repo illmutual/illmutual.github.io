@@ -1,0 +1,196 @@
+
+<!-- SECTION 1: HTML -->
+<!-- Defines what exists on the page -->
+
+<div class="calendar">
+  <div class="calendar-title" id="calendar-title">
+    Calendar
+  </div>
+
+  <div class="calendar-grid" id="calendar-grid"></div>
+
+  <div class="calendar-controls">
+    <button id="previous" type="button">← prev</button>
+    <button id="today" type="button">today</button>
+    <button id="next" type="button">next →</button>
+  </div>
+</div>
+
+
+<!-- SECTION 2: CSS -->
+<!-- Controls how the calendar looks -->
+
+<style>
+  .calendar {
+    font-family: Georgia, serif;
+    color: #263d2d;
+    background: #e7ebdc;
+    width: 100%;
+  }
+
+
+.calendar-title {
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.3rem 0.5rem;
+  line-height: 1.45;
+  background: #c0d0b5;
+  color: #263d2d;
+  border-bottom: 1px solid #526b45;
+}
+
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .calendar-grid :global(.day) {
+    text-align: center;
+    padding: 0.35rem 0;
+    border-right: 1px solid #a4b49b;
+    border-bottom: 1px solid #a4b49b;
+    font-size: 0.8rem;
+  }
+
+  .calendar-grid :global(.weekday) {
+    font-weight: bold;
+    background: #d5dfca;
+  }
+
+  .calendar-grid :global(.current-day) {
+    background: #526b45;
+    color: white;
+    font-weight: bold;
+  }
+
+  .calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem;
+  }
+
+  .calendar-controls button {
+    border: none;
+    background: transparent;
+    color: #263d2d;
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  .calendar-controls button:hover {
+    text-decoration: underline;
+  }
+</style>
+
+
+<!-- SECTION 3: JAVASCRIPT -->
+<!-- Controls how the calendar behaves -->
+
+<script>
+  const title = document.querySelector<HTMLElement>("#calendar-title");
+  const grid = document.querySelector<HTMLElement>("#calendar-grid");
+
+  const previous = document.querySelector<HTMLButtonElement>("#previous");
+  const next = document.querySelector<HTMLButtonElement>("#next");
+  const todayButton = document.querySelector<HTMLButtonElement>("#today");
+
+  const today = new Date();
+
+  let displayedYear = today.getFullYear();
+  let displayedMonth = today.getMonth();
+
+  function renderCalendar() {
+    if (!title || !grid) return;
+
+    const firstDay = new Date(
+      displayedYear,
+      displayedMonth,
+      1
+    ).getDay();
+
+    const daysInMonth = new Date(
+      displayedYear,
+      displayedMonth + 1,
+      0
+    ).getDate();
+
+    const monthName = new Date(
+      displayedYear,
+      displayedMonth,
+      1
+    ).toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric"
+    });
+
+    title.textContent = monthName.toLowerCase();
+
+    grid.replaceChildren();
+
+    // Add weekday headings
+    ["S", "M", "T", "W", "T", "F", "S"].forEach((day) => {
+      const cell = document.createElement("div");
+      cell.className = "day weekday";
+      cell.textContent = day;
+      grid.appendChild(cell);
+    });
+
+    // Add empty cells before the first day
+    for (let i = 0; i < firstDay; i++) {
+      const cell = document.createElement("div");
+      cell.className = "day";
+      grid.appendChild(cell);
+    }
+
+    // Add the days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cell = document.createElement("div");
+      cell.className = "day";
+      cell.textContent = String(day);
+
+      if (
+        day === today.getDate() &&
+        displayedMonth === today.getMonth() &&
+        displayedYear === today.getFullYear()
+      ) {
+        cell.classList.add("current-day");
+      }
+
+      grid.appendChild(cell);
+    }
+  }
+
+  previous?.addEventListener("click", () => {
+    displayedMonth--;
+
+    if (displayedMonth < 0) {
+      displayedMonth = 11;
+      displayedYear--;
+    }
+
+    renderCalendar();
+  });
+
+  next?.addEventListener("click", () => {
+    displayedMonth++;
+
+    if (displayedMonth > 11) {
+      displayedMonth = 0;
+      displayedYear++;
+    }
+
+    renderCalendar();
+  });
+
+  todayButton?.addEventListener("click", () => {
+    displayedYear = today.getFullYear();
+    displayedMonth = today.getMonth();
+    renderCalendar();
+  });
+
+  renderCalendar();
+</script>

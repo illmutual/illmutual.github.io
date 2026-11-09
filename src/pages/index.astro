@@ -1,91 +1,173 @@
 ---
-import Layout from "../layouts/BlogPost.astro";
+import Layout from "../layouts/Page.astro";
 import { getCollection } from "astro:content";
+import Calendar from "../components/Calendar.astro";
 
-const posts = (await getCollection("blog"))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+const allPosts = await getCollection("blog");
+
+console.log(
+  allPosts.map((post) => ({
+    id: post.id,
+    pubDate: post.data.pubDate
+  }))
+);
+
+const posts = allPosts.slice(0, 3);
 
 const lastUpdated = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 const statusText = "building + archiving coding projects, research papers, other cool shit";
 ---
-<main class="wrap">
-  <section class="shell">
-    <header class="topbar">
-      <div class="marquee"><span>| PDFs hosted here | code + notes | no ads |</span></div>
-		<div class="brand">
-        <span class="cursor"></span>
-        <span class="logo">illmutual - digital archive</span>
-      </div>
+<Layout>
+  <main class="wrap">
+    <section class="shell">
 
-      <nav class="nav">
-        <a href="/blog">blog</a>
-        <a href="/projects">projects</a>
-        <a href="/papers">papers</a>
-        <a href="/about">about</a>
-      </nav>
-    </header>
+      <!-- HEADER -->
 
-    <div class="grid3">
-      <!-- LEFT COLUMN -->
-      <aside class="col">
-        <div class="panel">
-          <div class="panelHead">status</div>
+<header class="topbar">
+  <div class="brand">
 
-          <div class="panelBody">
-            <p class="tiny muted">{statusText}</p>
+   <div class="header-banner">
+  <img
+    src="/header-art.jpeg"
+    alt="Black-and-white cat collage"
+    class="banner-center"
+  />
+</div>
 
-			<div class="statusRow">
-       			<span class="statusChip">last updated: {lastUpdated}</span>
-        		<span class="statusChip">timezone: CST</span>
-      		</div>
+    <h1>ill mutual</h1>
+    <p>a personal archive of sorts</p>
 
-            <div class="badgeGrid">
-      		</div>
-		 </div>
-  	</div>
-</aside>
+  </div>
+
+<nav class="nav" aria-label="Main navigation">
+  <a href="/">home</a>
+  <a href="/writing">writing</a>
+  <a href="/projects">projects</a>
+  <a href="/papers">research</a>
+  <a href="/about">about</a>
+</nav>
+
+</header>
+
+      <!-- THREE-COLUMN LAYOUT -->
+      <div class="grid3">
+
+        <!-- LEFT COLUMN -->
+        <aside class="col">
+          <div class="panel">
+            <Calendar />
+          </div>
+
+          <div class="panel">
+            <div class="panelHead">status</div>
+
+            <div class="panelBody">
+              <p class="tiny muted">{statusText}</p>
+
+              <div class="statusRow">
+                <span class="statusChip">
+                  last updated: {lastUpdated}
+                </span>
+                <span class="statusChip">
+                  timezone: CST
+                </span>
+              </div>
+
+              <div class="badgeGrid"></div>
+            </div>
+          </div>
+
+<div class="panel">
+  <div class="panelHead">link me!</div>
+
+  <div class="panelBody link-me">
+    <a href="/" class="site-button" aria-label="ill mutual homepage">
+  <span class="button-name">ILL MUTUAL</span>
+  <span class="button-detail">✳ PERSONAL ARCHIVE ✳</span>
+</a>
+    <p>
+      take a button for your website!
+    </p>
+  </div>
+<div class="panel">
+
+  <div class="panelBody">
+    <div class="graphic-shelf">
+      <span class="mini-stamp"> INTERNET R!OT </span>
+      <span class="mini-stamp">NO GODS / NO MASTERS</span>
+      <span class="mini-stamp"> GET GAYER NOW! </span>
+      <span class="mini-stamp">CYPHERPUNK</span>
+    </div>
+  </div>
+</div>
+        </aside>
 
         <!-- CENTER COLUMN -->
         <section class="col center">
-          <div class="panel">
-            <div class="panelHead">latest posts</div>
+          
+        <div class="panel">
+          <div class="panelHead">welcome to ill mutual</div>
 
-            <div class="panelBody">
-              <div class="postGrid">
-                {posts.map((post) => (
-                  <a
-                    class="postCard"
-                    href={`/blog/${post.id.replace(/\.mdx?$/, "")}/`}
-                  >
-                    <div class="postMeta">
-                      <span class="chip">blog</span>
-                      <time datetime={post.data.pubDate.toISOString()}>
-                        {post.data.pubDate.toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric"
-                          }
-                        )}
-                      </time>
-                    </div>
+          <div class="panelBody welcome">
+            <p>hello!</p>
 
-                    <div class="postTitle">
-                      {post.data.title}
-                    </div>
+            <p>
+              this is a place for things i've written,
+              things i'm thinking about, and things
+              i don't know what to do with yet.
+            </p>
 
-                    {post.data.description && (
-                      <div class="postDesc">
-                        {post.data.description}
-                      </div>
-                    )}
-                  </a>
-                ))}
-              </div>
-            </div>
+            <p>
+              some things here are finished.
+              others probably never will be.
+              feel free to look around.
+            </p>
           </div>
+        </div>
+
+<div class="panel">
+  <div class="panelBody">
+    <div class="collage">
+      <img src="/collage-1.png" alt="Godzilla" class="scrap scrap-one" />
+      <img src="/collage-2.png" alt="Second image" class="scrap scrap-two" />
+      <img src="/collage-3.png" alt="Third image" class="scrap scrap-three" />
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panelHead">site updates</div>
+
+  <div class="panelBody">
+    <ul class="update-log">
+      <li>
+        <strong>11.08.26</strong>
+        — started rebuilding ill mutual.
+      </li>
+
+      <li>
+        <strong>coming soon</strong>
+        — writing, collections, and other things.
+      </li>
+    </ul>
+  </div>
+
+
+<div class="panel">
+  <div class="panelHead">recent writing</div>
+
+  <div class="panelBody">
+ 
+<div class="writing-links">
+  <a href="/writing/the-country">
+    <strong>The Country</strong>
+    <span> · essay</span>
+  </a>
+</div>
+
+
+</div>
+
         </section>
 
         <!-- RIGHT COLUMN -->
@@ -108,6 +190,29 @@ const statusText = "building + archiving coding projects, research papers, other
               </a>
             </div>
           </div>
+           <div class="panel">
+            <div class="panelHead">who's asking?</div>
+
+            <div class="panelBody webmaster">
+              <p>bk / twenty-something / san antonio, tx</p>
+              <p>studying poverty in the rural south, particularly its relationship to racial capitalism, labor, and urban development.</p>
+              <p>otherwise, i'm probably coding or bothering my cats.</p>
+            </div>
+          </div>
+          <div class="panel">
+  <div class="panelHead">currently...</div>
+
+  <div class="panelBody">
+    <ul class="currently-list">
+      <li><strong>reading:</strong> the left hand of darkness</li>
+      <li><strong>watching:</strong> destiel edits</li>
+      <li><strong>listening:</strong> billy idol</li>
+      <li><strong>playing:</strong> new zelda</li>
+      <li><strong>working on:</strong> this website!</li>
+    </ul>
+  </div>
+</div>
+
         </aside>
 
       </div>
@@ -116,55 +221,249 @@ const statusText = "building + archiving coding projects, research papers, other
 </Layout>
 
 <style>
-:global(body){
-  margin:0;
-  color:#0b0b14;
-  font-family: ui-monospace, Menlo, Monaco, Consolas, "Courier New", monospace;
-  background:
-    radial-gradient(1200px 700px at 10% 10%, rgba(59, 233, 138, 0.484), transparent 60%),
-    radial-gradient(900px 600px at 90% 20%, rgba(0, 221, 255, 0.497), transparent 55%),
-    radial-gradient(900px 700px at 20% 90%, rgba(0, 255, 89, 0.18), transparent 60%),
-    radial-gradient(1200px 800px at 50% 50%, rgba(19, 61, 33, 0.92), rgba(43, 64, 49, 0.98)),
-    #42604e;
-}
 
-:global(body)::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background-image:
-    radial-gradient(rgba(255,255,255,.18) 1px, transparent 1px);
-  background-size: 3px 3px;
-  opacity:.10;
-}
 
-.wrap{ max-width:1100px; margin:0 auto; padding:2.25rem 1rem 4rem; }
-
-.shell{
-  background: rgba(255,255,255,.06);
-  border: 2px solid rgba(255,255,255,.18);
-  border-radius: 22px;
-  box-shadow: 0 20px 70px rgba(0,0,0,.45);
-  overflow:hidden;
-  backdrop-filter: blur(10px);
-}
-
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:1rem;
-  padding:.85rem 1rem;
-  background: linear-gradient(90deg, rgba(15, 190, 217, 0.18), rgba(255,92,213,.16));
-  border-bottom: 2px solid rgba(255,255,255,.18);
-}
-
-.brand {
+.graphic-shelf {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 0.5rem;
 }
+
+.mini-stamp {
+  display: inline-block;
+  padding: 0.25rem 0.4rem;
+  background: #f0efdf;
+  color: #263d2d;
+  border: 1px solid #263d2d;
+  font-family: monospace;
+  font-size: 9px;
+  font-weight: bold;
+  letter-spacing: -0.3px;
+}
+
+.mini-stamp:nth-child(2) {
+  background: #171717;
+  color: #f0efdf;
+  transform: rotate(2deg);
+}
+
+.mini-stamp:nth-child(3) {
+  background: #b5c7aa;
+  transform: rotate(-3deg);
+}
+
+.welcome {
+  padding: 1.5rem 2rem;
+  line-height: 1.6;
+}
+
+.welcome p {
+  margin: 0 0 1rem;
+}
+
+.welcome p:last-child {
+  margin-bottom: 0;
+}
+
+.update-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.update-log li {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #a4b49b;
+}
+
+.update-log li:last-child {
+  border-bottom: none;
+}
+
+
+.webmaster p {
+  margin: 0 0 0.5rem;
+}
+
+.webmaster p:last-child {
+  margin-bottom: 0;
+}
+
+.currently-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.currently-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px dotted #a4b49b;
+}
+
+.currently-list li:last-child {
+  border-bottom: none;
+}
+
+
+.link-me {
+  text-align: center;
+}
+
+
+.collage {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  overflow: hidden;
+  background: #d3ddc9;
+}
+
+.scrap {
+  position: absolute;
+  display: block;
+  width: 48%;
+  height: 230px;
+  object-fit: fit;
+  box-sizing: border-box;
+}
+
+.scrap-one {
+  top: 18px;
+  right: 5%;
+  left: auto;
+  transform: rotate(-7deg);
+  z-index: 1;
+  
+}
+
+.scrap-two {
+  top: 35px;
+  left: 5%;
+  transform: rotate(8deg);
+  z-index: 2;
+  mix-blend-mode: multiply;
+}
+
+.scrap-three {
+  bottom: 15px;
+  left: 37%;
+  transform: rotate(-4deg);
+  width: 30%;
+  height: 175px;
+  z-index: 3;
+}
+
+
+.site-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 31px;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  background: #171717;
+  color: #f3f0dc;
+  border: 2px solid #526b45;
+  text-decoration: none;
+  transform: rotate(-2deg);
+}
+
+.button-name {
+  font-family: Georgia, serif;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+.button-detail {
+  font-family: monospace;
+  font-size: 5px;
+  letter-spacing: 0.1px;
+}
+
+.site-button:hover {
+  background: #526b45;
+  transform: rotate(0deg);
+}
+
+.link-me p {
+  margin: 0.7rem 0 0;
+  font-size: 0.8rem;
+}
+
+:global(body) {
+  margin: 0;
+  background: #a7bd94;
+  color: #263d2d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.shell {
+  background: #e7ebdc;
+  border: 1px solid #526b45;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.topbar{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  background: #9bb588;
+  border-bottom: 2px solid #263d2d;
+}
+
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  text-align: center;
+}
+
+
+.brand h1 {
+  margin: 0;
+  padding-top: 1.25rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  font-weight: normal;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  color: #263d2d;
+}
+
+.brand p {
+  margin: 0;
+  padding: 0.3rem 0 1.75rem;
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: #405b3c;
+}
+
 
 .cursor {
   display: inline-block;
@@ -181,46 +480,95 @@ const statusText = "building + archiving coding projects, research papers, other
 }
 
 
-.nav{ display:flex; gap:.7rem; flex-wrap:wrap; }
-.nav a{
-  color: rgba(255,255,255,.92);
-  text-decoration:none;
-  font-weight:900;
-  padding:.3rem .55rem;
-  border-radius: 999px;
-  border:1px solid rgba(255,255,255,.22);
-  background: rgba(0,0,0,.18);
-}
-.nav a:hover{ filter:brightness(1.15); }
-
-.grid3{
-  display:grid;
-  grid-template-columns: 1fr 1.6fr 1fr;
-  gap: 1rem;
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   padding: 1rem;
+  background: #dce5d1;
+  border-top: 1px solid #526b45;
+  border-bottom: 1px solid #526b45;
 }
+
+.nav a {
+  color: #263d2d;
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.3rem 0.8rem;
+  background: transparent;
+  border: none;
+}
+
+.nav a:hover {
+  color: #526b45;
+  text-decoration: underline;
+}
+
+/* Add a decorative separator before each
+   link except the first one */
+
+.nav a + a::before {
+  content: "✳";
+  display: inline-block;
+  color: #526b45;
+  font-size: 0.9rem;
+  margin-right: 1.6rem;
+  pointer-events: none;
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns:
+  minmax(0, 1.1fr)
+  minmax(0, 2.2fr)
+  minmax(0, 1.1fr);
+  gap: 0;
+  padding: 0;
+  align-items: stretch;
+}
+
 @media (max-width: 980px){ .grid3{ grid-template-columns: 1fr; } }
 
-.col{ display:grid; gap:1rem; align-content:start; }
-
-.panel{
-  background: rgba(226, 239, 220, 0.85);
-  border: 2px solid rgba(10,10,10,.75);
-  border-radius: 18px;
-  box-shadow: 0 14px 30px rgba(0,0,0,.16);
-  overflow:hidden;
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+  background: #e7ebdc;
+  border-right: 1px solid #526b45;
 }
 
-.panelHead{
-  font-weight: 900;
-  letter-spacing:.08em;
-  text-transform: lowercase;
-  padding:.55rem .8rem;
-  background: linear-gradient(90deg, rgba(178, 215, 190, 0.55), rgba(0,220,255,.25));
-  border-bottom: 2px solid rgba(10,10,10,.65);
+.col:last-child {
+  border-right: none;
 }
 
-.panelBody{ padding:.85rem .9rem; }
+.panel {
+  background: #e7ebdc;
+  border: none;
+  border-bottom: 1px solid #526b45;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.panelHead {
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0;
+  padding: 0.3rem 0.5rem;
+  background: #c0d0b5;
+  color: #263d2d;
+  border-bottom: 1px solid #526b45;
+}
+
+.panelBody {
+  padding: 1.15rem;
+}
 
 .heroCard{
   background: rgba(255,255,255,.92);
@@ -235,6 +583,27 @@ h1{
   font-size: clamp(1.75rem, 3.6vw, 2.65rem);
   line-height:1.08;
   font-weight: 900;
+}
+
+.header-banner {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  background-image: url("/header-art.jpeg");
+  background-repeat: repeat-x;
+  background-size: auto 260px;
+  background-position: center top;
+}
+
+.banner-center {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 260px;
+  width: auto;
+  display: block;
 }
 
 .sub{ margin:0 0 .9rem; max-width:70ch; opacity:.9; }
@@ -286,7 +655,11 @@ h1{
   opacity:.75;
 }
 
-.postGrid{ display:grid; gap:.65rem; }
+.postGrid {
+  display: grid;
+  gap: 1rem;
+}
+
 .postCard{
   display:block;
   text-decoration:none;
@@ -296,7 +669,10 @@ h1{
   padding:.65rem .7rem;
   background: rgba(255,255,255,.75);
 }
-.postCard:hover{ transform: translateY(-2px); transition:.12s ease; }
+.postCard:hover {
+  background: #d5dfca;
+  transform: none;
+}
 
 .postMeta{
   display:flex;
@@ -314,8 +690,17 @@ h1{
   background: rgba(154, 152, 143, 0.55);
 }
 
-.postTitle{ font-weight: 900; margin-bottom:.2rem; }
-.postDesc{ opacity:.85; font-size:.9rem; }
+.postTitle {
+  font-family: Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: bold;
+  margin-bottom: 0.2rem;
+}
+
+.postDesc {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
 
 .tiny{ font-size:.9rem; margin:.1rem 0; }
 .tinyList{ margin:.2rem 0 0; padding-left: 1.1rem; }
@@ -346,10 +731,10 @@ h1{
   background: rgba(255,255,255,.78);
 }
 
-.badgeGrid{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap:.5rem;
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
 }
 
 .miniNote{
@@ -410,5 +795,19 @@ h1{
   color:#0b0b14;
 }
 .siteBtn:hover{ filter:brightness(1.07); transform: translateY(-2px); transition:.12s ease; }
+
+
+.writing-links a {
+  display: block;
+  color: #263d2d;
+  padding: 0.75rem;
+  border: 1px solid #a4b49b;
+  text-decoration: none;
+}
+
+.writing-links a:hover {
+  background: #d5dfca;
+  text-decoration: underline;
+}
 
 </style>

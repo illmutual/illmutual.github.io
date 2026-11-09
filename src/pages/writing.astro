@@ -1,0 +1,96 @@
+
+---
+import Layout from "../layouts/Page.astro";
+---
+
+<Layout>
+  <main class="writing-page">
+    <a href="/" class="back-link">← back home</a>
+
+    <h1>writing</h1>
+
+    <p class="intro">
+      fiction, poetry, essays, and other things.
+    </p>
+
+    <section>
+      <h2>fiction</h2>
+      <p>coming soon.</p>
+    </section>
+
+    <section>
+      <h2>poetry</h2>
+      <p>coming soon.</p>
+    </section>
+
+<section>
+  <h2>essays & other</h2>
+
+  <div class="writing-entry">
+    <a href="/writing/the-country">The Country</a>
+
+    <p>
+      A research-based essay on the 1970s queer nightclub, San Antonio Country.
+    </p>
+  </div>
+</section>
+  </main>
+</Layout>
+
+<style>
+
+
+.writing-entry {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid #526b45;
+}
+
+.writing-entry a {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #263d2d;
+  text-decoration: none;
+}
+
+.writing-entry a:hover {
+  text-decoration: underline;
+}
+
+.writing-entry p {
+  margin: 0.4rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+  .writing-page {
+    max-width: 760px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: #e7ebdc;
+    border: 1px solid #526b45;
+    color: #263d2d;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    margin: 1rem 0;
+  }
+
+  h2 {
+    border-bottom: 1px solid #526b45;
+    padding-bottom: 0.5rem;
+  }
+
+  section {
+    margin-top: 2rem;
+  }
+
+  .back-link {
+    color: #263d2d;
+  }
+
+  .intro {
+    font-style: italic;
+  }
+</style>

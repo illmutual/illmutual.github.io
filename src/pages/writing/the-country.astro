@@ -1,0 +1,89 @@
+
+---
+import Layout from "../../layouts/Page.astro";
+import { Content as Essay } from "../../writing/the-country.md";
+---
+
+
+<Layout>
+  <main class="article-page">
+
+    <a href="/writing" class="back-link">
+      ← back to writing
+    </a>
+
+    <header class="article-header">
+      <p class="category">creative nonfiction / san antonio</p>
+      <h1>The Country</h1>
+    </header>
+
+    <article class="article-body">
+  <Essay />
+</article>
+
+  </main>
+</Layout>
+
+<style>
+  .article-page {
+    max-width: 760px;
+    margin: 3rem auto;
+    padding: 3rem;
+      background: #e7ebdc;
+    border: 1px solid #526b45;
+    color: #263d2d;
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .back-link {
+    color: #526b45;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
+  .article-header {
+    text-align: center;
+    margin: 2.5rem 0 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #526b45;
+  }
+
+  .category {
+    font-family: monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 7vw, 5rem);
+    font-weight: normal;
+    margin: 0.5rem 0;
+  }
+
+  .subtitle {
+    font-style: italic;
+    color: #526b45;
+  }
+
+  .article-body {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.article-body :global(p) {
+  margin: 0 0 1.5rem;
+}
+
+  @media (max-width: 600px) {
+    .article-page {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+  }
+</style>
