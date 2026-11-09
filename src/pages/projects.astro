@@ -1,0 +1,41 @@
+
+---
+import Layout from "../layouts/Page.astro";
+---
+
+<Layout>
+  <main class="page">
+    <a href="/">← back home</a>
+
+    <h1>projects</h1>
+
+    <p>
+      a home for things i'm working on,
+      experimenting with, and occasionally finishing.
+    </p>
+
+    <p>more soon.</p>
+  </main>
+</Layout>
+
+<style>
+  .page {
+    max-width: 760px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: #e7ebdc;
+    border: 1px solid #526b45;
+    color: #263d2d;
+    box-sizing: border-box;
+    width: calc(100% - 2rem);
+  }
+
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 3rem;
+  }
+
+  a {
+    color: #526b45;
+  }
+</style>
