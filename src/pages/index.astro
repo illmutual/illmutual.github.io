@@ -868,9 +868,17 @@ h1{
   }
 
   .nav a + a::before {
-    margin-right: 0.5rem;
-    font-size: 0.7rem;
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 1.6rem;
+    background: #526b45;
+    transform: rotate(45deg);
+    vertical-align: middle;
+    pointer-events: none;
   }
+
 }
 
 </style>
