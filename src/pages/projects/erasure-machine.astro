@@ -15,13 +15,64 @@ import Layout from "../../layouts/Page.astro";
       placeholder="type something..."
     ></textarea>
 
-    <button id="erase-button">erase</button>
+    
+<div class="controls">
+  <button id="erase-button">erase</button>
+  <button id="reset-button">start over ↺</button>
+  <button id="poem-button">show poem ↗</button>
+</div>
 
-    <div id="result"></div>
+<div id="result"></div>
+<div id="poem-result" hidden></div>
+<button id="copy-button" hidden>copy poem ↗</button>
+
   </main>
 </Layout>
 
 <style>
+
+#poem-button {
+  background: transparent;
+  color: #526b45;
+  border: 1px solid #526b45;
+}
+
+#poem-button:hover {
+  background: #dce5d1;
+}
+
+#poem-result:not([hidden]) {
+  margin-top: 2rem;
+  padding: 2rem;
+  background: #f2f0e7;
+  border: 1px solid #526b45;
+  color: #263d2d;
+  font-family: Georgia, serif;
+  font-size: 1.25rem;
+  line-height: 1.9;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.controls button {
+  margin-top: 0;
+}
+
+#reset-button {
+  background: transparent;
+  color: #526b45;
+  border: 1px solid #526b45;
+}
+
+#reset-button:hover {
+  background: #dce5d1;
+}
+
   .machine {
     max-width: 800px;
     margin: 2rem auto;
@@ -94,37 +145,124 @@ import Layout from "../../layouts/Page.astro";
   margin: 1.25rem 0;
 }
 
+#copy-button {
+  display: block;
+  margin-top: 1rem;
+  background: transparent;
+  color: #526b45;
+  border: 1px solid #526b45;
+  padding: 0.65rem 1.5rem;
+  cursor: pointer;
+  font: inherit;
+}
+#copy-button[hidden] {
+  display: none;
+}
+#copy-button:hover {
+  background: #dce5d1;
+}
+
 </style>
+
 
 
 <script>
   const input = document.querySelector("#source-text");
   const button = document.querySelector("#erase-button");
+  const resetButton = document.querySelector("#reset-button");
   const result = document.querySelector("#result");
+  const poemButton = document.querySelector("#poem-button");
+  const poemResult = document.querySelector("#poem-result");
+  const copyButton = document.querySelector("#copy-button");
 
   let originalText = "";
   let words = [];
   let survivors = [];
+  let poemWords = [];
 
-function countWords(words) {
-  const counts = new Map();
+  // Words that are less interesting on their own
+  const commonWords = new Set([
+    "a", "an", "the", "and", "or", "but",
+    "of", "to", "for", "with", "at", "by",
+    "i", "you", "he", "she", "we", "they",
+    "is", "was", "were", "are", "be",
+    "it", "this", "that", "my", "your",
+    "had", "has", "have", "in", "on"
+  ]);
 
-  words.forEach((word) => {
-    const clean = word.toLowerCase().replace(/[^a-z']/g, "");
+  // Remove punctuation when evaluating a word
+  function clean(word) {
+    return word.toLowerCase().replace(/[^a-z']/g, "");
+  }
 
-    if (!clean) return;
+  
 
-    counts.set(clean, (counts.get(clean) || 0) + 1);
+function scoreFragment(fragment) {
+  let score = Math.random() * 2;
+
+  const meaningfulWords = fragment.filter((word) => {
+    const cleaned = clean(word);
+
+    return cleaned.length >= 4 &&
+      !commonWords.has(cleaned);
   });
 
-  return counts;
+  // Reward meaningful words
+  score += meaningfulWords.length * 2;
+
+  // Penalize longer fragments
+  score -= fragment.length * 1.2;
+
+  // Discourage fragments ending with connecting words
+  const lastWord = clean(fragment[fragment.length - 1]);
+
+  if (commonWords.has(lastWord)) {
+    score -= 3;
+  }
+
+  return score;
 }
 
 
-  const connectors = new Set([
-    "a", "an", "the", "and", "or", "but",
-    "of", "to", "for", "with", "at", "by"
-  ]);
+  // Choose the words that will form the final poem
+  function composePoem(words) {
+    const selected = words.map(() => false);
+
+    // Examine the source in groups of 15 words
+    for (let start = 0; start < words.length; start += 20) {
+      const end = Math.min(start + 20, words.length);
+
+      // Sometimes leave an entire section behind
+      if (Math.random() < 0.2) continue;
+
+      let bestScore = -Infinity;
+      let bestStart = start;
+      let bestLength = 1;
+
+      // Try different fragments within this section
+      for (let i = start; i < end; i++) {
+        for (let length = 1; length <= 4; length++) {
+          if (i + length > end) break;
+
+          const fragment = words.slice(i, i + length);
+          const score = scoreFragment(fragment);
+
+          if (score > bestScore) {
+            bestScore = score;
+            bestStart = i;
+            bestLength = length;
+          }
+        }
+      }
+
+      // Preserve the strongest fragment
+      for (let i = bestStart; i < bestStart + bestLength; i++) {
+        selected[i] = true;
+      }
+    }
+
+    return selected;
+  }
 
   button?.addEventListener("click", () => {
     if (!(input instanceof HTMLTextAreaElement) ||
@@ -137,131 +275,126 @@ function countWords(words) {
       return;
     }
 
-const commonWords = new Set([
-  "i", "me", "my", "you", "your", "he", "she",
-  "we", "they", "it", "this", "that",
-  "is", "was", "were", "am", "are", "be",
-  "been", "have", "had", "has", "do", "did",
-  "not", "so", "very", "just", "then",
-  "there", "here", "when", "what", "who",
-  "some", "more", "could", "would", "should",
-  "a", "an", "the", "and", "or", "but",
-  "of", "to", "for", "with", "at", "by"
-]);
-
-
-    // Reset when the source text changes
+    // Choose a new destination when the text changes
     if (text !== originalText) {
       originalText = text;
       words = text.split(/\s+/);
+
       survivors = words.map(() => true);
+      poemWords = composePoem(words);
     }
 
-    // Find phrases that are still visible
-    const phrases = [];
-    let start = 0;
+    // Find words that are visible but not part of the poem
+    
+const removable = [];
 
-    while (start < words.length) {
-      if (!survivors[start]) {
-        start++;
-        continue;
-      }
-
-      const length = Math.min(
-        Math.floor(Math.random() * 3) + 2,
-        words.length - start
-      );
-
-      const indices = [];
-
-      for (let i = start; i < start + length; i++) {
-        if (survivors[i]) indices.push(i);
-      }
-
-      if (indices.length > 0) {
-        phrases.push(indices);
-      }
-
-      start += length;
-    }
-
-  
-// Count how often each word appears in the original
-const wordCounts = countWords(words);
-
-// Erase phrases, but protect repeated words
-phrases.forEach((phrase) => {
-  const hasRepetition = phrase.some((index) => {
-    const clean = words[index]
-      .toLowerCase()
-      .replace(/[^a-z']/g, "");
-
-    return (
-  !connectors.has(clean) &&
-  clean !== "i" &&
-  clean !== "it" &&
-  clean !== "was" &&
-  clean !== "is" &&
-  (wordCounts.get(clean) || 0) >= 3
-);
-  });
-
-  
-// Check whether a phrase contains unusual words
-const hasUnusualWord = phrase.some((index) => {
-  const clean = words[index]
-    .toLowerCase()
-    .replace(/[^a-z']/g, "");
-
-  return clean.length >= 5 && !commonWords.has(clean);
-});
-
-// Give different phrases different survival chances
-let eraseChance = 0.35;
-
-if (hasRepetition) {
-  eraseChance = 0.08;
-} else if (hasUnusualWord) {
-  eraseChance = 0.18;
-}
-
-
-  if (Math.random() < eraseChance) {
-    phrase.forEach((index) => {
-      survivors[index] = false;
-    });
+words.forEach((word, index) => {
+  if (survivors[index] && !poemWords[index]) {
+    removable.push(index);
   }
 });
 
+    // Erase approximately 35% of what remains removable
+    const amount = Math.ceil(removable.length * 0.35);
 
-    // Remove isolated connecting words
-    words.forEach((word, index) => {
-      if (!survivors[index]) return;
+    // Shuffle the removable word positions
+    removable.sort(() => Math.random() - 0.5);
 
-      const cleanWord = word
-        .toLowerCase()
-        .replace(/[^a-z]/g, "");
+    for (let i = 0; i < amount; i++) {
+      survivors[removable[i]] = false;
+    }
 
-      const left = survivors[index - 1] ?? false;
-      const right = survivors[index + 1] ?? false;
-
-      if (connectors.has(cleanWord) && !left && !right) {
-        survivors[index] = false;
-      }
-    });
-
-    // Display the redacted text
+    // Display the result using our existing redactions
     result.replaceChildren();
 
     words.forEach((word, index) => {
       const span = document.createElement("span");
+
       span.textContent = word;
       span.className = survivors[index]
         ? "surviving"
         : "erased";
 
+      
       result.appendChild(span);
       result.appendChild(document.createTextNode(" "));
     });
+
+    // Update the poem view if it's currently visible
+    if (poemResult instanceof HTMLElement && !poemResult.hidden) {
+      poemResult.textContent = words
+        .filter((word, index) => survivors[index])
+        .join(" ");
+    }
   });
+
+
+resetButton?.addEventListener("click", () => {
+  if (!(result instanceof HTMLElement)) return;
+  if (poemResult instanceof HTMLElement) {
+  poemResult.hidden = true;
+  poemResult.textContent = "";
+}
+
+if (poemButton instanceof HTMLButtonElement) {
+  poemButton.textContent = "show poem ↗";
+}
+
+if (copyButton instanceof HTMLButtonElement) {
+  copyButton.hidden = true;
+  copyButton.textContent = "copy poem ↗";
+}
+
+  // Forget the previous poem
+  originalText = "";
+  words = [];
+  survivors = [];
+  poemWords = [];
+
+  // Clear the redacted document
+  result.replaceChildren();
+});
+
+poemButton?.addEventListener("click", () => {
+  if (!(poemResult instanceof HTMLElement)) return;
+  if (!(poemButton instanceof HTMLButtonElement)) return;
+  if (!(copyButton instanceof HTMLButtonElement)) return;
+
+  if (poemResult.hidden) {
+    const poem = words.filter((word, index) => survivors[index]);
+
+    poemResult.textContent = poem.join(" ");
+    poemResult.hidden = false;
+    copyButton.hidden = false;
+    poemButton.textContent = "hide poem ↗";
+  } else {
+    poemResult.hidden = true;
+    copyButton.hidden = true;
+    poemButton.textContent = "show poem ↗";
+  }
+});
+
+copyButton?.addEventListener("click", async () => {
+  if (!(copyButton instanceof HTMLButtonElement)) return;
+
+  const poem = words
+    .filter((word, index) => survivors[index])
+    .join(" ");
+
+  if (!poem) {
+    copyButton.textContent = "nothing to copy";
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(poem);
+
+    copyButton.textContent = "copied! ✓";
+  } catch (error) {
+    copyButton.textContent = "copy failed";
+    console.error("Could not copy poem:", error);
+  }
+});
+
 </script>
+
