@@ -6,28 +6,205 @@ import PageContent from "../components/PageContent.astro";
 
 <Layout>
   <PageContent>
-  <main class="page">
-    <a href="/">← back home</a>
+    <main class="projects-page">
+      <a href="/" class="back-link">← back home</a>
 
-    <h1>projects</h1>
+      <div class="page-heading">
+        <h1>projects</h1>
+        <span>INDEX / 001</span>
+      </div>
 
-    <p>
-      a home for things i'm working on,
-      experimenting with, and occasionally finishing.
-    </p>
+      <p class="intro">
+        things i'm making, testing, and often breaking.
+      </p>
 
-    <p>more soon.</p>
-  </main>
+      <section class="project-entry">
+        <span class="project-number">01</span>
+
+        <div class="project-details">
+          <div class="project-heading">
+            <h2>the erasure machine</h2>
+            <span class="project-status">IN PROGRESS · 2026</span>
+          </div>
+
+          <p>
+            a small experiment in disappearance.
+          </p>
+
+          <a href="/projects/erasure-machine">
+            enter the machine ↗
+          </a>
+        </div>
+      </section>
+    </main>
   </PageContent>
 </Layout>
 
 <style>
-  h1 {
-    font-family: Georgia, serif;
-    font-size: 3rem;
+  .projects-page {
+    color: #263d2d;
   }
 
-  a {
+  .back-link {
+    color: #526b45;
+    font-size: 0.9rem;
+  }
+
+  .page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  h1 {
+    font-family: Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin: 0;
+  }
+
+  .page-heading span {
+    font-family: monospace;
+    font-size: 0.75rem;
     color: #526b45;
   }
+
+  .intro {
+    font-style: italic;
+    font-size: 1rem;
+    color: #526b45;
+    margin: 0.75rem 0 2rem;
+  }
+
+  .project-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid #526b45;
+    border-bottom: 1px solid #a4b49b;
+  }
+
+  .project-number {
+    font-family: Georgia, serif;
+    font-size: 1.3rem;
+    color: #526b45;
+    background: #d0dcc7;
+    border: 1px solid #526b45;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .project-details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .project-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  .project-heading h2 {
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: normal;
+    margin: 0;
+  }
+
+  .project-status {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: #526b45;
+  }
+
+  .project-details p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0.75rem 0;
+  }
+
+  .project-details a {
+    color: #526b45;
+    font-size: 0.9rem;
+    text-underline-offset: 3px;
+  }
+
+  .project-details a:hover {
+    color: #263d2d;
+  }
+
+  @media (max-width: 600px) {
+    .project-entry {
+      gap: 0.75rem;
+    }
+
+    .project-heading h2 {
+      font-size: 1.3rem;
+    }
+  }
 </style>
+
+
+<script>
+  const input = document.querySelector("#source-text");
+  const button = document.querySelector("#erase-button");
+  const result = document.querySelector("#result");
+
+  button?.addEventListener("click", () => {
+    if (!(input instanceof HTMLTextAreaElement) ||
+        !(result instanceof HTMLElement)) return;
+
+    const text = input.value.trim();
+
+    if (!text) {
+      result.textContent = "nothing to erase.";
+      return;
+    }
+
+    const words = text.split(/\s+/);
+
+    const survivors = words.filter(() => {
+      return Math.random() > 0.5;
+    });
+
+    result.textContent = survivors.join(" ");
+  });
+
+
+.machine h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: normal;
+  line-height: 1.15;
+  margin: 1.25rem 0;
+}
+
+.machine > a {
+  color: #526b45;
+  font-size: 0.9rem;
+  text-underline-offset: 3px;
+}
+
+.machine > p {
+  font-family: Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+#result:not(:empty) {
+  padding: 1.5rem;
+  border: 1px solid #526b45;
+  background: #f2f0e7;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+
+</script>

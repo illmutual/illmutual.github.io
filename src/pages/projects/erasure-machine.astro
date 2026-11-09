@@ -1,0 +1,267 @@
+
+---
+import Layout from "../../layouts/Page.astro";
+---
+
+<Layout title="The Erasure Machine | ill mutual">
+  <main class="machine">
+    <a href="/projects" class="back-link">← back to projects</a>
+
+    <h1>the erasure machine</h1>
+    <p>the machine awaits.</p>
+
+    <textarea
+      id="source-text"
+      placeholder="type something..."
+    ></textarea>
+
+    <button id="erase-button">erase</button>
+
+    <div id="result"></div>
+  </main>
+</Layout>
+
+<style>
+  .machine {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #e7ebdc;
+    border: 1px solid #526b45;
+    color: #263d2d;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 180px;
+    box-sizing: border-box;
+    padding: 1rem;
+    background: #f2f0e7;
+    border: 1px solid #526b45;
+    font: inherit;
+    resize: vertical;
+  }
+
+  button {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.65rem 1.5rem;
+    background: #526b45;
+    color: #fff;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+  }
+
+ 
+#result {
+  margin-top: 2rem;
+  white-space: pre-wrap;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 2;
+}
+
+
+#result :global(.erased) {
+  background: #171b17;
+  color: transparent;
+  user-select: none;
+}
+
+
+
+
+#result :global(.surviving) {
+  color: #263d2d;
+}
+
+
+
+.machine .back-link,
+.machine .back-link:visited {
+  color: #526b45;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.machine h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: normal;
+  line-height: 1.15;
+  margin: 1.25rem 0;
+}
+
+</style>
+
+
+<script>
+  const input = document.querySelector("#source-text");
+  const button = document.querySelector("#erase-button");
+  const result = document.querySelector("#result");
+
+  let originalText = "";
+  let words = [];
+  let survivors = [];
+
+function countWords(words) {
+  const counts = new Map();
+
+  words.forEach((word) => {
+    const clean = word.toLowerCase().replace(/[^a-z']/g, "");
+
+    if (!clean) return;
+
+    counts.set(clean, (counts.get(clean) || 0) + 1);
+  });
+
+  return counts;
+}
+
+
+  const connectors = new Set([
+    "a", "an", "the", "and", "or", "but",
+    "of", "to", "for", "with", "at", "by"
+  ]);
+
+  button?.addEventListener("click", () => {
+    if (!(input instanceof HTMLTextAreaElement) ||
+        !(result instanceof HTMLElement)) return;
+
+    const text = input.value.trim();
+
+    if (!text) {
+      result.textContent = "nothing to erase.";
+      return;
+    }
+
+const commonWords = new Set([
+  "i", "me", "my", "you", "your", "he", "she",
+  "we", "they", "it", "this", "that",
+  "is", "was", "were", "am", "are", "be",
+  "been", "have", "had", "has", "do", "did",
+  "not", "so", "very", "just", "then",
+  "there", "here", "when", "what", "who",
+  "some", "more", "could", "would", "should",
+  "a", "an", "the", "and", "or", "but",
+  "of", "to", "for", "with", "at", "by"
+]);
+
+
+    // Reset when the source text changes
+    if (text !== originalText) {
+      originalText = text;
+      words = text.split(/\s+/);
+      survivors = words.map(() => true);
+    }
+
+    // Find phrases that are still visible
+    const phrases = [];
+    let start = 0;
+
+    while (start < words.length) {
+      if (!survivors[start]) {
+        start++;
+        continue;
+      }
+
+      const length = Math.min(
+        Math.floor(Math.random() * 3) + 2,
+        words.length - start
+      );
+
+      const indices = [];
+
+      for (let i = start; i < start + length; i++) {
+        if (survivors[i]) indices.push(i);
+      }
+
+      if (indices.length > 0) {
+        phrases.push(indices);
+      }
+
+      start += length;
+    }
+
+  
+// Count how often each word appears in the original
+const wordCounts = countWords(words);
+
+// Erase phrases, but protect repeated words
+phrases.forEach((phrase) => {
+  const hasRepetition = phrase.some((index) => {
+    const clean = words[index]
+      .toLowerCase()
+      .replace(/[^a-z']/g, "");
+
+    return (
+  !connectors.has(clean) &&
+  clean !== "i" &&
+  clean !== "it" &&
+  clean !== "was" &&
+  clean !== "is" &&
+  (wordCounts.get(clean) || 0) >= 3
+);
+  });
+
+  
+// Check whether a phrase contains unusual words
+const hasUnusualWord = phrase.some((index) => {
+  const clean = words[index]
+    .toLowerCase()
+    .replace(/[^a-z']/g, "");
+
+  return clean.length >= 5 && !commonWords.has(clean);
+});
+
+// Give different phrases different survival chances
+let eraseChance = 0.35;
+
+if (hasRepetition) {
+  eraseChance = 0.08;
+} else if (hasUnusualWord) {
+  eraseChance = 0.18;
+}
+
+
+  if (Math.random() < eraseChance) {
+    phrase.forEach((index) => {
+      survivors[index] = false;
+    });
+  }
+});
+
+
+    // Remove isolated connecting words
+    words.forEach((word, index) => {
+      if (!survivors[index]) return;
+
+      const cleanWord = word
+        .toLowerCase()
+        .replace(/[^a-z]/g, "");
+
+      const left = survivors[index - 1] ?? false;
+      const right = survivors[index + 1] ?? false;
+
+      if (connectors.has(cleanWord) && !left && !right) {
+        survivors[index] = false;
+      }
+    });
+
+    // Display the redacted text
+    result.replaceChildren();
+
+    words.forEach((word, index) => {
+      const span = document.createElement("span");
+      span.textContent = word;
+      span.className = survivors[index]
+        ? "surviving"
+        : "erased";
+
+      result.appendChild(span);
+      result.appendChild(document.createTextNode(" "));
+    });
+  });
+</script>

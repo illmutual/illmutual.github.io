@@ -12,36 +12,101 @@ import PageContent from "../components/PageContent.astro";
     <h1>about</h1>
 
     <section>
-      <h2>who's asking?</h2>
+      <h2>a bit about me</h2>
 
       <p>
-        bk / twenty-something / san antonio, tx
+        student/writer/researcher/organizer
       </p>
 
       <p>
-        i study poverty in the rural south, particularly
-        its relationship to racial capitalism, labor,
-        and urban development.
+        a lot of my work circles around the same questions: 
+        how do we care for one another,
+        who gets cared for, how do we find enough care within to carve out lives for ourselves?
       </p>
 
       <p>
-        otherwise, i'm probably coding or bothering my cats.
-      </p>
-    </section>
-
-    <section>
-      <h2>about this site</h2>
-
-      <p>
-        ill mutual is my personal archive for writing,
-        research, projects, and things i want to keep.
+        outside of that, i love coding, body horror,
+    queer histories, niche defunct webseries', and pokemon. 
       </p>
     </section>
+
+
+<section>
+  <h2>why ill mutual?</h2>
+
+  <p>
+    i originally chose ill mutual as the name of my substack,
+    and carried it over to this website. i'm chronically ill
+    and a community organizer. the name is a play on
+    both of those things.
+  </p>
+
+  <p>
+    i like the different meanings of mutual: mutual aid,
+    mutual dependence, mutual understanding. rage against 
+    this idea of not owing anyone anything. i owe everyone 
+    everything.
+  </p>
+
+  <p>
+    this site is somewhere to keep my writing, research,
+    coding projects, and whatever else i want to put
+    into the world.
+  </p>
+</section>
+
+
+
+<section class="elsewhere">
+  <h2>elsewhere on the internet</h2>
+
+  <p>
+    other places you can find me:
+  </p>
+
+  <div class="social-links">
+    <a
+       <a href="https://www.tumblr.com/theslobgob69">tumblr ↗</a>
+       <a href="https:illmutual.substack.com">substack ↗</a>
+    </a>
+  </div>
+
+  
+</section>
+
   </main>
   </PageContent>
 </Layout>
 
 <style>
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.social-links a {
+  display: inline-block;
+  padding: 0.5rem 0.85rem;
+  background: #dce5d1;
+  border: 1px solid #526b45;
+  color: #263d2d;
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.social-links a:hover {
+  background: #526b45;
+  color: #f0f2e8;
+}
+
+.social-links a:focus-visible {
+  outline: 2px solid #263d2d;
+  outline-offset: 3px;
+}
+
 
   h1 {
     font-family: Georgia, serif;
