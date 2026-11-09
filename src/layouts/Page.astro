@@ -1,6 +1,7 @@
 
 ---
 import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
 
 const {
   title = "ill mutual",
@@ -14,7 +15,17 @@ const {
     <BaseHead title={title} description={description} />
   </head>
 
-  <body>
-    <slot />
-  </body>
+
+<body class="site-body">
+  <Header />
+  <slot />
+</body>
+
 </html>
+
+<style is:global>
+  body.site-body {
+    background: #9bb588;
+    margin: 0;
+  }
+</style>

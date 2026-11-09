@@ -24,31 +24,6 @@ const statusText = "building + archiving coding projects, research papers, other
 
       <!-- HEADER -->
 
-<header class="topbar">
-  <div class="brand">
-
-   <div class="header-banner">
-  <img
-    src="/header-art.jpeg"
-    alt="Black-and-white cat collage"
-    class="banner-center"
-  />
-</div>
-
-    <h1>ill mutual</h1>
-    <p>a personal archive of sorts</p>
-
-  </div>
-
-<nav class="nav" aria-label="Main navigation">
-  <a href="/writing">writing</a>
-  <a href="/projects">projects</a>
-  <a href="/research">research</a>
-  <a href="/about">about</a>
-</nav>
-
-</header>
-
       <!-- THREE-COLUMN LAYOUT -->
       <div class="grid3">
 
@@ -420,49 +395,6 @@ const statusText = "building + archiving coding projects, research papers, other
   overflow: hidden;
 }
 
-.topbar{
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0;
-  padding: 0;
-  background: #9bb588;
-  border-bottom: 2px solid #263d2d;
-}
-
-
-.brand {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  padding: 0;
-  text-align: center;
-}
-
-
-.brand h1 {
-  margin: 0;
-  padding-top: 1.25rem;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(3.5rem, 7vw, 6rem);
-  font-weight: normal;
-  line-height: 1.15;
-  letter-spacing: -0.035em;
-  color: #263d2d;
-}
-
-.brand p {
-  margin: 0;
-  padding: 0.3rem 0 1.75rem;
-  font-family: Georgia, serif;
-  font-size: 1rem;
-  font-style: italic;
-  letter-spacing: 0.02em;
-  color: #405b3c;
-}
-
-
 .cursor {
   display: inline-block;
   width: 8px;
@@ -475,46 +407,6 @@ const statusText = "building + archiving coding projects, research papers, other
 @keyframes blink {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
-}
-
-
-.nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 1rem;
-  background: #dce5d1;
-  border-top: 1px solid #526b45;
-  border-bottom: 1px solid #526b45;
-}
-
-.nav a {
-  color: #263d2d;
-  font-family: Georgia, serif;
-  font-size: 1.1rem;
-  font-weight: bold;
-  text-decoration: none;
-  padding: 0.3rem 0.8rem;
-  background: transparent;
-  border: none;
-}
-
-.nav a:hover {
-  color: #526b45;
-  text-decoration: underline;
-}
-
-/* Add a decorative separator before each
-   link except the first one */
-
-.nav a + a::before {
-  content: "✳︎";
-  display: inline-block;
-  color: #526b45;
-  font-size: 0.9rem;
-  margin-right: 1.6rem;
-  pointer-events: none;
 }
 
 .grid3 {
@@ -609,27 +501,6 @@ h1{
   font-size: clamp(1.75rem, 3.6vw, 2.65rem);
   line-height:1.08;
   font-weight: 900;
-}
-
-.header-banner {
-  position: relative;
-  width: 100%;
-  height: 260px;
-  overflow: hidden;
-  background-image: url("/header-art.jpeg");
-  background-repeat: repeat-x;
-  background-size: auto 260px;
-  background-position: center top;
-}
-
-.banner-center {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 260px;
-  width: auto;
-  display: block;
 }
 
 .sub{ margin:0 0 .9rem; max-width:70ch; opacity:.9; }
@@ -873,28 +744,6 @@ h1{
   .brand p {
     font-size: 0.85rem;
     padding-bottom: 1rem;
-  }
-
-  .nav {
-    padding: 0.65rem;
-    gap: 0.2rem;
-  }
-
-  .nav a {
-    font-size: 0.9rem;
-    padding: 0.3rem;
-  }
-
-  .nav a + a::before {
-    content: "";
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    margin-right: 1.6rem;
-    background: #526b45;
-    transform: rotate(45deg);
-    vertical-align: middle;
-    pointer-events: none;
   }
 
 }

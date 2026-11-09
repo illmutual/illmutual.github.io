@@ -1,0 +1,85 @@
+
+---
+import Layout from "../../layouts/Page.astro";
+import { Content as Story } from "../../writing/untitled-01.md";
+---
+
+
+<Layout title="Untitled | ill mutual">
+  <main class="story-page">
+    <a href="/writing" class="back-link">← back to writing</a>
+
+    <header class="article-header">
+      <p class="category">fiction / 2026</p>
+      <h1>Untitled</h1>
+    </header>
+
+    <article class="article-body">
+      <Story />
+    </article>
+  </main>
+</Layout>
+
+
+<style>
+  .story-page {
+    max-width: 760px;
+    margin: 2rem auto;
+    padding: 2rem;
+    box-sizing: border-box;
+    background: #e7ebdc;
+    border: 1px solid #526b45;
+    color: #263d2d;
+  }
+
+  article {
+    font-family: Georgia, serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  article :global(h1) {
+    font-size: 2.4rem;
+    font-weight: normal;
+    line-height: 1.2;
+    margin: 1.5rem 0 2rem;
+  }
+
+  article :global(p) {
+    margin: 0 0 1.4rem;
+  }
+
+  .back-link {
+    color: #526b45;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .story-page {
+      margin: 0.5rem;
+      padding: 1.25rem;
+    }
+  }
+
+  .article-header {
+  margin: 2rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #526b45;
+}
+
+.article-header h1 {
+  font-family: Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: normal;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.category {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #526b45;
+  margin-bottom: 0.75rem;
+}
+
+</style>

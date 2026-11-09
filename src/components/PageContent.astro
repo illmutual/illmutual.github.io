@@ -1,0 +1,30 @@
+
+<div class="page-content">
+  <slot />
+</div>
+
+<style>
+  .page-content {
+    width: calc(100% - 2rem);
+    max-width: 900px;
+    box-sizing: border-box;
+    margin: 2rem auto;
+    padding: 2rem;
+    color: #526b45;
+
+    background: #e7ebdc;
+    color: #263d2d;
+    border: 1px solid #526b45;
+
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  @media (max-width: 600px) {
+    .page-content {
+      width: calc(100% - 1rem);
+      margin: 0.5rem auto;
+      padding: 1.25rem;
+      color: #526b45;
+    }
+  }
+</style>

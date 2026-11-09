@@ -1,9 +1,11 @@
 
 ---
 import Layout from "../layouts/Page.astro";
+import PageContent from "../components/PageContent.astro";
 ---
 
 <Layout>
+<PageContent>
   <main class="about-page">
     <a href="/" class="back-link">← back home</a>
 
@@ -36,19 +38,10 @@ import Layout from "../layouts/Page.astro";
       </p>
     </section>
   </main>
+  </PageContent>
 </Layout>
 
 <style>
-  .about-page {
-    width: calc(100% - 2rem);
-    max-width: 760px;
-    box-sizing: border-box;
-    margin: 3rem auto;
-    padding: 2rem;
-    background: #e7ebdc;
-    border: 1px solid #526b45;
-    color: #263d2d;
-  }
 
   h1 {
     font-family: Georgia, serif;
